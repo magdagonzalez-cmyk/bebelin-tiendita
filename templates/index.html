@@ -20,10 +20,10 @@
         <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
         <span>uwucitos bebelines <span class="brand-tail">*fake smile *</span></span>
       </a>
-      <div class="area-label"><span class="area-dot" aria-hidden="true"></span><span>{{ catalog.location }}</span></div>
-      <button class="location-button" id="locate-button" type="button" title="Usar mi ubicación">
+      <div class="area-label"><span class="area-dot" aria-hidden="true"></span><span id="area-name">{{ catalog.location }}</span></div>
+      <button class="location-button" id="locate-button" type="button" title="Buscar tiendas cerca de mí" aria-describedby="location-help">
         <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2"/></svg>
-        <span>Mi ubicación</span>
+        <span>Buscar cerca de mí</span>
       </button>
     </header>
 
@@ -58,12 +58,13 @@
 
       <div class="demo-notice" role="note">
         <span class="notice-symbol" aria-hidden="true">i</span>
-        <p><strong>Precios de referencia.</strong> Esta versión usa ejemplos estimados, no precios verificados de tiendas reales.</p>
+        <p><strong>Precios de referencia.</strong> <span id="data-notice-text">Esta versión usa ejemplos estimados, no precios verificados de tiendas reales.</span></p>
       </div>
+      <p class="location-help" id="location-help" role="status" aria-live="polite">Pulsa «Buscar cerca de mí» para que el navegador solicite permiso. Usaremos la ubicación solo para buscar hasta 25 comercios en OpenStreetMap, dentro de 3 km; no se guarda en una cuenta.</p>
 
       <section class="explorer" aria-label="Mapa y precios">
         <div class="map-column">
-          <div class="map-heading"><span>TIENDAS EN EL MAPA</span><span class="map-live"><span></span> SANTIAGO</span></div>
+          <div class="map-heading"><span>TIENDAS EN EL MAPA</span><span class="map-live"><span></span><span id="map-area-label">SANTIAGO</span></span></div>
           <div id="map" class="map" role="application" aria-label="Mapa de ejemplo de comercios en Santiago"></div>
           <div class="map-attribution-note">Mapa © OpenStreetMap contributors</div>
         </div>
