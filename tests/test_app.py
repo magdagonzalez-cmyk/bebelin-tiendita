@@ -42,6 +42,19 @@ class SearchApiTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 400)
 
+    def test_search_finds_new_daily_products(self):
+        response = self.client.get("/api/search?q=detergente")
+        data = response.get_json()
+
+        self.assertEqual(data["count"], 4)
+        self.assertTrue(all(result["product_id"] == "detergent" for result in data["results"]))
+
+    def test_categories_include_personal_care_and_cleaning(self):
+        response = self.client.get("/api/categories")
+
+        self.assertIn("Cuidado personal", response.get_json())
+        self.assertIn("Limpieza del hogar", response.get_json())
+
     def test_unknown_product_returns_empty_results(self):
         response = self.client.get("/api/search?q=not-a-product")
 
