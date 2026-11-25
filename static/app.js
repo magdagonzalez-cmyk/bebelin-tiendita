@@ -64,6 +64,7 @@ function renderResults(results) {
   for (const [index, result] of results.entries()) {
     const item = document.createElement("article");
     item.className = "result-item";
+    item.style.setProperty("--item-index", index);
     item.tabIndex = 0;
     item.setAttribute("role", "button");
     item.setAttribute("aria-label", `${result.store_name}, ${result.neighborhood}, ${formatPrice(result.price)}. Ver en el mapa`);
