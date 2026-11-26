@@ -1,16 +1,26 @@
 # Vitrina
 
-Vitrina es un comparador web de precios de productos cotidianos por tienda y zona. Está construido con Flask y ofrece búsqueda por producto y categoría, orden por precio o cercanía, y un mapa interactivo basado en OpenStreetMap.
+Vitrina es una aplicación web para comparar precios de productos cotidianos por tienda y zona. Está desarrollada con Python y Flask, y ofrece búsqueda por producto y categoría, ordenamiento por precio o cercanía y un mapa de OpenStreetMap.
 
-## Qué hace y cómo funciona
+## Funcionalidades
 
-La aplicación sirve la interfaz desde Flask y busca coincidencias en un catálogo local. La búsqueda normaliza acentos y tolera hasta dos errores de escritura por palabra. Al solicitar tiendas cercanas, el navegador pide permiso para compartir la ubicación y el servidor consulta OpenStreetMap/Overpass para encontrar hasta 25 comercios en un radio de 3 km. Los resultados se pueden ordenar por precio o distancia; la consulta de tiendas se guarda en caché durante 10 minutos.
+- Busca productos por nombre, categoría o alias; normaliza acentos y tolera errores de escritura.
+- Filtra por categoría y ordena los resultados por precio o distancia.
+- Muestra comercios y precios de ejemplo en CLP desde `data/catalog.json`.
+- Permite buscar hasta 25 comercios cercanos en un radio de 3 km usando la ubicación del navegador y OpenStreetMap/Overpass; las consultas se guardan en caché durante 10 minutos.
+- Si Overpass no está disponible, informa del problema y recurre a los comercios de ejemplo que estén cerca.
 
-El catálogo está en `data/catalog.json` e incluye ejemplos de despensa, bebidas, lácteos, cuidado personal y limpieza, con ubicaciones aproximadas y precios estimados en CLP. No son tiendas ni precios reales o verificados. OpenStreetMap aporta nombres y ubicaciones, no precios: para comercios encontrados allí se muestra un promedio del catálogo, marcado como estimado. Si el servicio cartográfico no está disponible, la app avisa y usa los ejemplos cercanos disponibles. La búsqueda manual funciona aunque no se comparta la ubicación.
+Los precios del catálogo son estimados y no representan precios reales verificados. OpenStreetMap proporciona ubicaciones, no precios: para comercios obtenidos del mapa, el precio mostrado es un promedio de referencia del catálogo. La aplicación no necesita una base de datos. El mapa y la búsqueda por ubicación requieren conexión a internet; la búsqueda manual funciona sin compartir la ubicación.
+
+## Requisitos
+
+- Python 3.10 o posterior.
+- `pip`.
+- Conexión a internet para cargar el mapa y buscar comercios cercanos.
 
 ## Clonar y ejecutar
 
-Se necesita Python 3 y conexión a internet para cargar el mapa y consultar OpenStreetMap. Clona la versión de producción (`main`) y entra al directorio:
+Clona la versión funcional de producción (`main`) y entra en el directorio:
 
 ```bash
 git clone --branch main https://github.com/magdagonzalez-cmyk/bebelin-tiendita.git
@@ -38,14 +48,23 @@ python -m pip install -r requirements.txt
 python app.py
 ```
 
-Abre http://127.0.0.1:5000 en el navegador.
+Abre <http://127.0.0.1:5000> en el navegador. Si PowerShell bloquea la activación del entorno virtual, puedes ejecutar `\.venv\Scripts\python.exe -m pip install -r requirements.txt` y `\.venv\Scripts\python.exe app.py` sin activarlo.
 
-## Desarrollo y pruebas
+## Pruebas
 
-Los cambios se trabajan en `develop`; `main` contiene la versión funcional de producción. Después de clonar, cambia a la rama de desarrollo con `git switch develop`.
-
-Ejecuta las pruebas desde la raíz del proyecto:
+Con el entorno virtual activado, ejecuta desde la raíz del proyecto:
 
 ```bash
 python -m unittest discover -s tests -v
 ```
+
+## API
+
+- `GET /`: página principal.
+- `GET /api/categories`: categorías disponibles.
+- `GET /api/search?q=pan`: busca productos; acepta opcionalmente `category`, `sort`, `lat` y `lng`. Para ordenar por distancia o buscar comercios cercanos, envía ambas coordenadas.
+
+## Ramas
+
+- `main`: versión funcional destinada a producción.
+- `develop`: rama para el desarrollo, cambios y correcciones.
