@@ -1,30 +1,70 @@
 # Vitrina
 
-Comparador de precios de productos cotidianos por tienda y zona. Está construido con Flask y sirve una interfaz web responsive con mapa de OpenStreetMap.
+Vitrina es una aplicación web para comparar precios de productos cotidianos por tienda y zona. Está desarrollada con Python y Flask, y ofrece una interfaz responsive con búsqueda, filtros, ordenamiento y un mapa basado en OpenStreetMap.
 
-## Ejecutar localmente
+## Funcionalidades
+
+- Busca productos por nombre, categoría o alias; tolera errores de escritura.
+- Filtra por categoría y ordena los resultados por precio o distancia.
+- Muestra comercios y precios de ejemplo en CLP, con datos incluidos en `data/catalog.json`.
+- Permite buscar comercios cercanos usando la ubicación del navegador y OpenStreetMap/Overpass.
+- Si no se puede consultar Overpass, informa del problema y recurre a los comercios de ejemplo que estén cerca.
+
+Los precios del catálogo son estimados y no representan precios reales verificados. OpenStreetMap proporciona ubicaciones, no precios: para comercios obtenidos del mapa, el precio mostrado es un promedio de referencia del catálogo. La aplicación no necesita una base de datos. El mapa y la búsqueda por ubicación requieren conexión a internet; la búsqueda manual funciona sin compartir la ubicación.
+
+## Requisitos
+
+- Python 3.10 o posterior.
+- `pip`.
+- Conexión a internet para cargar el mapa y buscar comercios cercanos.
+
+## Instalación y ejecución
+
+Clona el repositorio y entra en su directorio:
 
 ```bash
-python -m venv .venv
+git clone https://github.com/magdagonzalez-cmyk/bebelin-tiendita.git
+cd bebelin-tiendita
+```
+
+Crea y activa un entorno virtual. En Windows PowerShell:
+
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+En macOS o Linux:
+
+```bash
+python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+```
+
+Instala las dependencias e inicia la aplicación:
+
+```bash
+python -m pip install -r requirements.txt
 python app.py
 ```
 
-En Windows PowerShell, activa el entorno con `.venv\Scripts\Activate.ps1`. Después abre http://127.0.0.1:5000.
+Abre <http://127.0.0.1:5000> en el navegador. Si PowerShell bloquea la activación del entorno virtual, puedes ejecutar `.\.venv\Scripts\python.exe -m pip install -r requirements.txt` y `.\.venv\Scripts\python.exe app.py` sin activarlo.
 
-## Probar
+## Pruebas
+
+Con el entorno virtual activado, ejecuta:
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-## Datos
+## API
 
-El catálogo está en `data/catalog.json` y contiene ejemplos de despensa, bebidas, lácteos, cuidado personal y limpieza del hogar, con ubicaciones aproximadas y precios estimados en CLP. No representa tiendas o precios reales ni verificados.
+- `GET /`: página principal.
+- `GET /api/categories`: categorías disponibles.
+- `GET /api/search?q=pan`: busca productos; acepta opcionalmente `category`, `sort`, `lat` y `lng`. Para ordenar por distancia o buscar comercios cercanos, envía ambas coordenadas.
 
-La búsqueda tolera hasta dos errores de escritura por palabra. «Buscar cerca de mí» solicita permiso del navegador solo después de pulsarlo; si se concede, consulta OpenStreetMap/Overpass para encontrar hasta 25 comercios en un radio de 3 km y los ordena por cercanía. La consulta se mantiene en caché temporal durante 10 minutos para limitar solicitudes repetidas. La cobertura depende de los datos cartográficos disponibles en cada zona.
+## Ramas
 
-OpenStreetMap aporta nombres y ubicaciones, no precios. Para comercios encontrados allí, el precio que aparece es un promedio de los precios de ejemplo del catálogo y está marcado como estimado; no es una cotización real. Si Overpass está ocupado o no responde, la app avisa y solo usa ejemplos de Santiago que estén cerca de la ubicación compartida. Para precios reales falta conectar una fuente comercial o cargar datos verificados y actualizados.
-
-El mapa y la búsqueda de comercios usan servicios públicos de OpenStreetMap y requieren conexión a internet. Si el navegador no concede ubicación, la búsqueda manual sigue disponible.
+- `main`: versión funcional destinada a producción.
+- `develop`: rama para el desarrollo, cambios y correcciones.
