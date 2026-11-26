@@ -11,13 +11,13 @@ const locationHelp = document.querySelector("#location-help");
 const areaName = document.querySelector("#area-name");
 const mapAreaLabel = document.querySelector("#map-area-label");
 const dataNoticeText = document.querySelector("#data-notice-text");
+const mapElement = document.querySelector("#map");
 
 let activeCategory = "";
 let userLocation = null;
 let map;
 let markerLayer;
 let currentLocationMarker;
-let currentResults = [];
 
 function formatPrice(price) {
   return new Intl.NumberFormat("es-CL", {
@@ -65,7 +65,6 @@ function updateMap(results) {
 }
 
 function renderResults(results) {
-  currentResults = results;
   resultsList.replaceChildren();
   emptyState.hidden = results.length > 0;
   resultsList.hidden = results.length === 0;
@@ -169,6 +168,7 @@ function setUserLocation(latitude, longitude) {
   userLocation = { lat: latitude, lng: longitude };
   areaName.textContent = "Cerca de ti";
   mapAreaLabel.textContent = "CERCA DE TI";
+  mapElement.setAttribute("aria-label", "Mapa de tiendas cercanas a tu ubicación");
   locationHelp.textContent = "Buscando hasta 25 comercios dentro de 3 km...";
   const distanceOption = sortSelect.querySelector('option[value="distance"]');
   distanceOption.disabled = false;
